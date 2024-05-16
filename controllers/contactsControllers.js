@@ -99,9 +99,6 @@ export const updateContact = (req, res, next) => {
 
   if (Object.keys(req.body).length === 0) {
     throw HttpError(400, "Body must have at least one field");
-    // return res
-    //   .status(400)
-    //   .json({ message: "Body must have at least one field" });
   }
 
   const id = req.params.id;
