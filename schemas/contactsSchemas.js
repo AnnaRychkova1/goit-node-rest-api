@@ -26,6 +26,6 @@ export const updateContactSchema = Joi.object({
   email: Joi.string().email().message("Невірний формат електронної адреси"),
   phone: Joi.string()
     .pattern(/^\(\d{3}\) \d{3}-\d{4}$/)
-    .message("Невірний формат - номер має бути +380........."),
+    .message("Невірний формат - номер має бути  (123) 456-7890"),
   favorite: Joi.boolean(),
 });
