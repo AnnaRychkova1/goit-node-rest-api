@@ -47,6 +47,13 @@ const userCreateSchema = Joi.object({
   }),
 });
 
+const userUpdateSubscriptionSchema = Joi.object({
+  subscription: Joi.string().valid("starter", "pro", "business").messages({
+    "any.only":
+      "Тип підписки має бути одним з варіантів: starter, pro або business",
+  }),
+});
+
 export const User = model("User", userSchema);
 
-export { userCreateSchema };
+export { userCreateSchema, userUpdateSubscriptionSchema };

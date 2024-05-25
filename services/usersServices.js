@@ -8,12 +8,26 @@ async function createUser(email, passwordHash) {
   return User.create({ email, password: passwordHash });
 }
 
-export async function setUserToken(id, token) {
-  return User.findByIdAndUpdate({ _id: id }, token);
+async function setUserToken(id, token) {
+  return User.findByIdAndUpdate({ _id: id }, token, {
+    new: true,
+  });
 }
 
-export async function findUserById(_id) {
+async function findUserById(_id) {
   return User.findById({ _id });
 }
 
-export default { findUser, createUser, setUserToken, findUserById };
+async function updateUserSubscription(id, body) {
+  return User.findByIdAndUpdate({ _id: id }, body, {
+    new: true,
+  });
+}
+
+export default {
+  findUser,
+  createUser,
+  setUserToken,
+  findUserById,
+  updateUserSubscription,
+};

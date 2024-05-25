@@ -1,7 +1,12 @@
 import { Contact } from "../schemas/contacts.js";
 
-async function listContacts(owner) {
-  return Contact.find({ owner });
+async function listContacts(owner, page = 2, limit = 20, favorite) {
+  const skip = (page - 1) * limit;
+  const filter = { owner };
+  if (favorite !== undefined) {
+    filter.favorite = favorite === "true";
+  }
+  return Contact.find(filter).skip(skip).limit(limit);
 }
 
 async function getContactById(contactId, owner) {

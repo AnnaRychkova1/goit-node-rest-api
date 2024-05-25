@@ -3,8 +3,15 @@ import HttpError from "../helpers/HttpError.js";
 
 export const getAllContacts = async (req, res, next) => {
   const owner = req.user.id;
+  const { page = 1, limit = 20, favorite } = req.query;
+
   try {
-    const contacts = await contactsService.listContacts(owner);
+    const contacts = await contactsService.listContacts(
+      owner,
+      parseInt(page),
+      parseInt(limit),
+      favorite
+    );
     res.status(200).json(contacts);
   } catch (err) {
     next(HttpError(500, "Server error"));

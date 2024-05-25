@@ -48,7 +48,7 @@ export const login = async (req, res, next) => {
       expiresIn: "1h",
     });
 
-    await usersService.setUserToken(user._id, { token }, { new: true });
+    await usersService.setUserToken(user._id, { token });
 
     res.status(201).json({
       token,
@@ -64,11 +64,7 @@ export const login = async (req, res, next) => {
 
 export const logout = async (req, res, next) => {
   try {
-    await usersService.setUserToken(
-      req.user.id,
-      { token: null },
-      { new: true }
-    );
+    await usersService.setUserToken(req.user.id, { token: null });
 
     res.status(204).json({});
   } catch (err) {
@@ -89,6 +85,34 @@ export const current = async (req, res, next) => {
       email: user.email,
       subscription: user.subscription,
     });
+  } catch (err) {
+    next(HttpError(500, "Server error"));
+  }
+};
+
+export const updateSubscription = async (req, res, next) => {
+  const id = req.user.id;
+
+  if (
+    Object.keys(req.body).length !== 1 ||
+    !["starter", "pro", "business"].includes(req.body.subscription)
+  ) {
+    return next(
+      HttpError(
+        400,
+        "Body must have one field: subscription, with value 'starter', 'pro', or 'business'"
+      )
+    );
+  }
+
+  try {
+    const contact = await usersService.updateUserSubscription(id, req.body);
+
+    if (contact) {
+      res.status(200).json(contact);
+    } else {
+      next(HttpError(404));
+    }
   } catch (err) {
     next(HttpError(500, "Server error"));
   }

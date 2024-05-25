@@ -9,6 +9,7 @@ import {
   login,
   logout,
   current,
+  updateSubscription,
 } from "../controllers/usersControllers.js";
 
 const usersRouter = express.Router();
@@ -20,5 +21,12 @@ usersRouter.post("/login", validateBody(schema.userCreateSchema), login);
 usersRouter.post("/logout", authMiddleware, logout);
 
 usersRouter.get("/current", authMiddleware, current);
+
+usersRouter.patch(
+  "/",
+  authMiddleware,
+  validateBody(schema.userUpdateSubscriptionSchema),
+  updateSubscription
+);
 
 export default usersRouter;

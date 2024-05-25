@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
-import { findUserById } from "../services/usersServices.js";
+import usersServices from "../services/usersServices.js";
+
 import HttpError from "../helpers/HttpError.js";
 
 const auth = async (req, res, next) => {
@@ -21,7 +22,7 @@ const auth = async (req, res, next) => {
     }
 
     try {
-      const user = await findUserById(decode.id);
+      const user = await usersServices.findUserById(decode.id);
 
       if (user === null) {
         return next(HttpError(401, "Not authorized"));
