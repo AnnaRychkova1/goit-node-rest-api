@@ -1,5 +1,8 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import gravatar from "gravatar";
+import * as fs from "node:fs/promises";
+import path from "node:path";
 
 import usersService from "../services/usersServices.js";
 import HttpError from "../helpers/HttpError.js";
@@ -16,7 +19,13 @@ export const register = async (req, res, next) => {
 
     const passwordHash = await bcrypt.hash(password, 10);
 
-    const newUser = await usersService.createUser(email, passwordHash);
+    const avatarURL = gravatar.url(email, { s: "200", d: "retro" });
+
+    const newUser = await usersService.createUser(
+      email,
+      passwordHash,
+      avatarURL
+    );
 
     res.status(201).json({
       user: {
@@ -106,14 +115,43 @@ export const updateSubscription = async (req, res, next) => {
   }
 
   try {
-    const contact = await usersService.updateUserSubscription(id, req.body);
+    const user = await usersService.updateUserSubscription(id, req.body);
 
-    if (contact) {
-      res.status(200).json(contact);
+    if (user) {
+      res.status(200).json(user);
     } else {
       next(HttpError(404));
     }
   } catch (err) {
     next(HttpError(500, "Server error"));
+  }
+};
+
+export const changeAvatar = async (req, res, next) => {
+  try {
+    const newPath = path.resolve("public", "avatars", req.file.filename);
+
+    // console.log(newPath);
+
+    await fs.rename(req.file.path, newPath);
+
+    const avatarURL = req.file.filename;
+    // console.log(req.file.path);
+    // console.log(avatarURL);
+    try {
+      const user = await usersService.updateAvatar(req.user.id, avatarURL);
+
+      console.log(user);
+
+      if (user) {
+        res.status(200).json(user);
+      } else {
+        next(HttpError(404));
+      }
+    } catch (error) {
+      next(error);
+    }
+  } catch (error) {
+    next(error);
   }
 };

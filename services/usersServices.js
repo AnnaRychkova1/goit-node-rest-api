@@ -4,8 +4,8 @@ async function findUser(email) {
   return User.findOne({ email });
 }
 
-async function createUser(email, passwordHash) {
-  return User.create({ email, password: passwordHash });
+async function createUser(email, passwordHash, avatarURL) {
+  return User.create({ email, password: passwordHash, avatarURL });
 }
 
 async function setUserToken(id, token) {
@@ -24,10 +24,17 @@ async function updateUserSubscription(id, body) {
   });
 }
 
+async function updateAvatar(id, avatarURL) {
+  return User.findByIdAndUpdate({ _id: id }, avatarURL, {
+    new: true,
+  });
+}
+
 export default {
   findUser,
   createUser,
   setUserToken,
   findUserById,
   updateUserSubscription,
+  updateAvatar,
 };

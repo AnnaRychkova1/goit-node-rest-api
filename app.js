@@ -3,6 +3,7 @@ import morgan from "morgan";
 import cors from "cors";
 import mongoose from "mongoose";
 import "dotenv/config";
+import path from "node:path";
 
 import contactsRouter from "./routes/contactsRouter.js";
 import usersRouter from "./routes/usersRouter.js";
@@ -13,6 +14,7 @@ app.use(morgan("tiny"));
 app.use(cors());
 app.use(express.json());
 
+app.use("/avatars", express.static(path.resolve("public/avatars")));
 app.use("/api/users", usersRouter);
 app.use("/api/contacts", contactsRouter);
 

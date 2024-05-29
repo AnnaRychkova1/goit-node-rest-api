@@ -4,6 +4,12 @@ node_modules/
 .vscode
 .DS_Store
 
+# tmp/Avatars
+tmp/*
+!tmp/.gitkeep
+public/avatars/*
+!public/avatars/.gitkeep
+
 # Logs
 logs
 *.log
