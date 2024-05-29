@@ -52,6 +52,9 @@ const userCreateSchema = Joi.object({
     "any.only":
       "Тип підписки має бути одним з варіантів: starter, pro або business",
   }),
+  avatarURL: Joi.string().messages({
+    "string.base": "avatarURL повинен бути рядком",
+  }),
 });
 
 const userUpdateSubscriptionSchema = Joi.object({
