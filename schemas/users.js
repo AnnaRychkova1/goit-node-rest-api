@@ -1,6 +1,5 @@
 import { Schema, model } from "mongoose";
 import Joi from "joi";
-// import gravatar from "gravatar";
 
 const userSchema = new Schema(
   {
@@ -24,9 +23,6 @@ const userSchema = new Schema(
     },
     avatarURL: {
       type: String,
-      // default: function () {
-      //   return gravatar.url(this.email, { s: "200", d: "retro" });
-      // },
     },
   },
   {
