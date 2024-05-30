@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import gravatar from "gravatar";
+import Jimp from "jimp";
 import * as fs from "node:fs/promises";
 import path from "node:path";
 
@@ -59,7 +60,7 @@ export const login = async (req, res, next) => {
 
     await usersService.setUserToken(user._id, { token });
 
-    res.status(201).json({
+    res.status(200).json({
       token,
       user: {
         email: user.email,
@@ -131,20 +132,26 @@ export const changeAvatar = async (req, res, next) => {
   try {
     const newPath = path.resolve("public", "avatars", req.file.filename);
 
-    // console.log(newPath);
+    Jimp.read(req.file.path)
+      .then((file) => {
+        return file.resize(250, 250).quality(60).write(newPath);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
 
     await fs.rename(req.file.path, newPath);
 
-    const avatarURL = req.file.filename;
-    // console.log(req.file.path);
-    // console.log(avatarURL);
     try {
-      const user = await usersService.updateAvatar(req.user.id, avatarURL);
-
-      console.log(user);
+      const user = await usersService.updateAvatar(
+        req.user.id,
+        req.file.filename
+      );
 
       if (user) {
-        res.status(200).json(user);
+        res.status(200).json({
+          avatarURL: user.avatarURL,
+        });
       } else {
         next(HttpError(404));
       }

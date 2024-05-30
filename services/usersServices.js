@@ -4,30 +4,24 @@ async function findUser(email) {
   return User.findOne({ email });
 }
 
-async function createUser(email, passwordHash, avatarURL) {
-  return User.create({ email, password: passwordHash, avatarURL });
+async function createUser(email, password, avatarURL) {
+  return User.create({ email, password, avatarURL });
 }
 
-async function setUserToken(id, token) {
-  return User.findByIdAndUpdate({ _id: id }, token, {
-    new: true,
-  });
+async function setUserToken(_id, token) {
+  return User.findByIdAndUpdate({ _id }, token, { new: true });
 }
 
 async function findUserById(_id) {
   return User.findById({ _id });
 }
 
-async function updateUserSubscription(id, body) {
-  return User.findByIdAndUpdate({ _id: id }, body, {
-    new: true,
-  });
+async function updateUserSubscription(_id, body) {
+  return User.findByIdAndUpdate({ _id }, body, { new: true });
 }
 
-async function updateAvatar(id, avatarURL) {
-  return User.findByIdAndUpdate({ _id: id }, avatarURL, {
-    new: true,
-  });
+async function updateAvatar(_id, avatarURL) {
+  return User.findByIdAndUpdate({ _id }, { avatarURL }, { new: true });
 }
 
 export default {
