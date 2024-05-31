@@ -130,7 +130,11 @@ export const updateSubscription = async (req, res, next) => {
 
 export const changeAvatar = async (req, res, next) => {
   try {
+    if (!req.file) {
+      return next(HttpError(400));
+    }
     const newPath = path.resolve("public", "avatars", req.file.filename);
+    const avatarURL = path.join("/avatars", req.file.filename);
 
     Jimp.read(req.file.path)
       .then((file) => {
@@ -143,10 +147,7 @@ export const changeAvatar = async (req, res, next) => {
     await fs.rename(req.file.path, newPath);
 
     try {
-      const user = await usersService.updateAvatar(
-        req.user.id,
-        req.file.filename
-      );
+      const user = await usersService.updateAvatar(req.user.id, avatarURL);
 
       if (user) {
         res.status(200).json({
