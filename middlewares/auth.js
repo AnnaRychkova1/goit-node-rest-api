@@ -21,8 +21,12 @@ const auth = async (req, res, next) => {
       return next(HttpError(401, "Not authorized"));
     }
 
+    const _id = decode.id;
+
     try {
-      const user = await usersServices.findUserById(decode.id);
+      const user = await usersServices.findUserByElement({ _id });
+
+      console.log(user);
 
       if (user === null) {
         return next(HttpError(401, "Not authorized"));

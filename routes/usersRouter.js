@@ -7,6 +7,8 @@ import uploadMiddleware from "../middlewares/upload.js";
 
 import {
   register,
+  verifyEmail,
+  resendingVerifyEmail,
   login,
   logout,
   current,
@@ -17,6 +19,14 @@ import {
 const usersRouter = express.Router();
 
 usersRouter.post("/register", validateBody(schema.userCreateSchema), register);
+
+usersRouter.get("/verify/:verificationToken", verifyEmail);
+
+usersRouter.post(
+  "/verify",
+  validateBody(schema.userValidateVerifyEmail),
+  resendingVerifyEmail
+);
 
 usersRouter.post("/login", validateBody(schema.userCreateSchema), login);
 

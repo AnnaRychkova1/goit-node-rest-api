@@ -99,11 +99,7 @@ export const updateStatusContact = async (req, res, next) => {
   }
 
   try {
-    const contact = await contactsService.updateStatusContact(
-      id,
-      owner,
-      req.body
-    );
+    const contact = await contactsService.updateContact(id, owner, req.body);
 
     if (contact) {
       res.status(200).json(contact);

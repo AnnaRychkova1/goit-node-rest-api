@@ -24,6 +24,15 @@ const userSchema = new Schema(
     avatarURL: {
       type: String,
     },
+
+    verify: {
+      type: Boolean,
+      default: false,
+    },
+    verificationToken: {
+      type: String,
+      required: [true, "Verify token is required"],
+    },
   },
   {
     versionKey: false,
@@ -51,6 +60,12 @@ const userCreateSchema = Joi.object({
   avatarURL: Joi.string().messages({
     "string.base": "avatarURL повинен бути рядком",
   }),
+  verify: Joi.boolean().messages({
+    "string.base": "verify повинен бути true або false",
+  }),
+  verificationToken: Joi.string().messages({
+    "string.base": "verificationToken повинен бути рядком",
+  }),
 });
 
 const userUpdateSubscriptionSchema = Joi.object({
@@ -60,6 +75,17 @@ const userUpdateSubscriptionSchema = Joi.object({
   }),
 });
 
+const userValidateVerifyEmail = Joi.object({
+  email: Joi.string().email().required().messages({
+    "string.email": "Невірний формат електронної адреси",
+    "any.required": "Email є обов'язковим полем",
+  }),
+});
+
 export const User = model("User", userSchema);
 
-export { userCreateSchema, userUpdateSubscriptionSchema };
+export {
+  userCreateSchema,
+  userUpdateSubscriptionSchema,
+  userValidateVerifyEmail,
+};

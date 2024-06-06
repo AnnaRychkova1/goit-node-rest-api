@@ -27,17 +27,10 @@ async function updateContact(contactId, owner, body) {
   });
 }
 
-async function updateStatusContact(contactId, owner, body) {
-  return Contact.findOneAndUpdate({ _id: contactId, owner }, body, {
-    returnDocument: "after",
-  });
-}
-
 export default {
   listContacts,
   getContactById,
   removeContact,
   addContact,
   updateContact,
-  updateStatusContact,
 };
